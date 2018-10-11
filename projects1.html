@@ -134,16 +134,21 @@ img {vertical-align: middle;}
 
 <div class="mySlides fade">
   <div class="numbertext">1 / 2</div>
-  <img src="gifs/flight/backwardflight.gif" style="width:100%">
+  <img src="gifs/flight/backwardflight.gif" style="width:75%">
   <div class="text">Caption Text</div>
 </div>
 
 <div class="mySlides fade">
   <div class="numbertext">2 / 3</div>
-  <img src="img/dfly_maneuver_EI48.jpg" style="width:100%">
+  <img src="img/dfly_maneuver_EI48.jpg" style="width:75%">
   <div class="text">Caption Two</div>
 </div>
 
+<div class="mySlides fade">
+  <div class="numbertext">2 / 3</div>
+  <img src="img/dfly_maneuver_EI48.jpg" style="width:75%">
+  <div class="text">Caption Two</div>
+</div>  
 
 </div>
 <br>
@@ -172,7 +177,7 @@ function showSlides() {
     }
     slides[slideIndex-1].style.display = "block";  
     dots[slideIndex-1].className += " active";
-    setTimeout(showSlides, 5000); // Change image every 2 seconds
+    setTimeout(showSlides, 10000); // Change image every 2 seconds
 }
 </script>
 
