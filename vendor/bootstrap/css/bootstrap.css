@@ -5809,21 +5809,21 @@ button.close {
 }
 
 .carousel {
-  position: absolute;
+  position: relative;
 }
 
 .carousel-inner {
-  position: absolute;
+  position: relative;
   width: 100%;
   overflow: hidden;
 }
 
 .carousel-item {
-  position: absolute;
+  position: relative;
   display: none;
   -ms-flex-align: center;
   align-items: center;
-  width: 35%;
+  width: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   -webkit-perspective: 1000px;
