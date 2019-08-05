@@ -568,14 +568,14 @@
       interval: 5000,
       keyboard: true,
       slide: false,
-      
+      pause: 'hover',
       wrap: true
     };
     var DefaultType = {
       interval: '(number|boolean)',
       keyboard: 'boolean',
       slide: '(boolean|string)',
-  
+      pause: '(string|boolean)',
       wrap: 'boolean'
     };
     var Direction = {
@@ -627,7 +627,7 @@
         this._items = null;
         this._interval = null;
         this._activeElement = null;
-       
+        this._isPaused = false;
         this._isSliding = false;
         this.touchTimeout = null;
         this._config = this._getConfig(config);
@@ -661,7 +661,11 @@
         }
       };
 
-      
+      _proto.pause = function pause(event) {
+        if (!event) {
+          this._isPaused = true;
+        }
+
         if (this._element.querySelector(Selector.NEXT_PREV)) {
           Util.triggerTransitionEnd(this._element);
           this.cycle(true);
@@ -672,14 +676,18 @@
       };
 
       _proto.cycle = function cycle(event) {
-       
+        if (!event) {
+          this._isPaused = false;
+        }
 
         if (this._interval) {
           clearInterval(this._interval);
           this._interval = null;
         }
 
-        
+        if (this._config.interval && !this._isPaused) {
+          this._interval = setInterval((document.visibilityState ? this.nextWhenVisible : this.next).bind(this), this._config.interval);
+        }
       };
 
       _proto.to = function to(index) {
@@ -701,7 +709,7 @@
         }
 
         if (activeIndex === index) {
-          
+          this.pause();
           this.cycle();
           return;
         }
@@ -718,7 +726,7 @@
         this._config = null;
         this._element = null;
         this._interval = null;
-        
+        this._isPaused = null;
         this._isSliding = null;
         this._activeElement = null;
         this._indicatorsElement = null;
@@ -740,7 +748,12 @@
           });
         }
 
-       
+        if (this._config.pause === 'hover') {
+          $$$1(this._element).on(Event.MOUSEENTER, function (event) {
+            return _this2.pause(event);
+          }).on(Event.MOUSELEAVE, function (event) {
+            return _this2.cycle(event);
+          });
 
           if ('ontouchstart' in document.documentElement) {
             // If it's a touch-enabled device, mouseenter/leave are fired as
@@ -751,7 +764,11 @@
             // is NOT fired) and after a timeout (to allow for mouse compatibility
             // events to fire) we explicitly restart cycling
             $$$1(this._element).on(Event.TOUCHEND, function () {
-             
+              _this2.pause();
+
+              if (_this2.touchTimeout) {
+                clearTimeout(_this2.touchTimeout);
+              }
 
               _this2.touchTimeout = setTimeout(function (event) {
                 return _this2.cycle(event);
@@ -876,6 +893,10 @@
 
         this._isSliding = true;
 
+        if (isCycling) {
+          this.pause();
+        }
+
         this._setActiveIndicatorElement(nextElement);
 
         var slidEvent = $$$1.Event(Event.SLID, {
@@ -938,7 +959,7 @@
 
             data[action]();
           } else if (_config.interval) {
-            
+            data.pause();
             data.cycle();
           }
         });
