@@ -568,7 +568,6 @@
       interval: 5000,
       keyboard: true,
       slide: false,
-      pause: null
       wrap: true
     };
     var DefaultType = {
